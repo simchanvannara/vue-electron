@@ -2,6 +2,7 @@
   <div id="wrapper">
     <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
     <router-link to="/">Back</router-link>
+    <button @click="getData()"> get</button>
   </div>
 </template>
 
@@ -10,8 +11,13 @@
   export default {
     name: 'chat-page',
     methods: {
-      open (link) {
-        this.$electron.shell.openExternal(link)
+      getData () {
+        console.log(1111)
+        this.$http.get('http://localhost:3030/todos').then((res) => {
+          console.log(res)
+        }).catch((e) => {
+          console.log(e)
+        })
       }
     }
   }
