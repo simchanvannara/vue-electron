@@ -1,8 +1,23 @@
 <template>
   <div id="wrapper">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
+    <div>
+      <input type="text" v-model="testing">
+    </div>
+    <br>    
+    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" @click="send()">send</button>
+    <br>
+    <br>
     <router-link to="/">Back</router-link>
+    <br>
+    <br>
     <button @click="getData()"> get</button>
+    <br>
+    <br>
+    <ul id="example-1">
+      <li v-for="item in items">
+        {{ item.text }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -10,10 +25,31 @@
 
   export default {
     name: 'chat-page',
+    data () {
+      return {
+        testing: '',
+        items: {}
+      }
+    },
     methods: {
       getData () {
         console.log(1111)
-        this.$http.get('http://localhost:3030/todos').then((res) => {
+        this.$socket.emit('chat-send', 'test')
+        this.$http.get('http://localhost:3030/chats').then((res) => {
+          this.items = res.body
+          console.log('111111111', this.items)
+        }).catch((e) => {
+          console.log(e)
+        })
+      },
+      send () {
+        console.log(this.text)
+        var postData = {
+          text: this.text,
+          user_id: '1'
+        }
+        console.log(postData)
+        this.$http.post('http://localhost:3030/chats', postData).then((res) => {
           console.log(res)
         }).catch((e) => {
           console.log(e)
